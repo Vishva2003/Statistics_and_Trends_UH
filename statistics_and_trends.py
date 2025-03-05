@@ -3,7 +3,7 @@ This is the template file for the statistics and trends assignment.
 You will be expected to complete all the sections and
 make this a fully working, documented file.
 You should NOT change any function, file or variable names,
- if they are given to you here.
+if they are given to you here.
 Make use of the functions presented in the lectures
 and ensure your code is PEP-8 compliant, including docstrings.
 """
@@ -16,6 +16,10 @@ import seaborn as sns
 
 
 def plot_relational_plot(df):
+    """
+    The function `plot_relational_plot` creates a scatter plot comparing the opening and closing prices
+    from a DataFrame and saves the plot as a 'relational_plot.png' image.
+    """
     
     fig, ax = plt.subplots(figsize=(7,7))
     ax.grid(color = 'gray' , zorder = -3)
@@ -30,6 +34,11 @@ def plot_relational_plot(df):
 
 
 def plot_categorical_plot(df):
+    """
+    The function `plot_categorical_plot` generates a bar plot showing the average trading volume by
+    month from a given DataFrame and saves the plot as a 'categorical_plot.png' image.
+    """
+    
     avg_mon = df.groupby('Month')['Volume'].mean()
     fig, ax = plt.subplots(figsize=(7,7))
     plt.grid(color = 'gray' , zorder = -3 , linestyle = '--')
@@ -44,6 +53,10 @@ def plot_categorical_plot(df):
 
 
 def plot_statistical_plot(df):
+    """
+    The function `plot_statistical_plot` generates a heatmap of the correlation matrix for numerical
+    columns in a DataFrame and saves the plot as 'statistical_plot.png'.
+    """
     
     fig, ax = plt.subplots(figsize=(7,7))
     df_numeric = df.select_dtypes(include=["number"])
@@ -55,6 +68,10 @@ def plot_statistical_plot(df):
 
 
 def statistical_analysis(df, col: str):
+    """
+    The function `statistical_analysis` calculates the mean, standard deviation, skewness, and excess
+    kurtosis of a specified column in a DataFrame.
+    """
     
     mean = df[col].mean()
     stddev = df[col].std()
@@ -64,32 +81,51 @@ def statistical_analysis(df, col: str):
 
 
 def preprocessing(df):
+    """
+    The function preprocesses the input DataFrame by dropping missing values and then displays data
+    summary statistics, sample data, and correlation matrix before returning the processed DataFrame.
+    """
+    
     # You should preprocess your data in this function and
     # make use of quick features such as 'describe', 'head/tail' and 'corr'.
+    
     df.dropna(inplace=True)
     print("Data Summary:\n", df.describe())
     print("\nSample Data:\n", df.head(10))
     print("\nCorrelation Matrix:\n", df.corr())
+    
     return df
 
 
 def writing(moments, col):
+    """
+    The function `writing` calculates and prints descriptive statistics for a given attribute, including
+    mean, standard deviation, skewness, and excess kurtosis, and determines whether the data is skewed
+    and the type of kurtosis.
+    """
     
     mean, stddev, skew, excess_kurtosis = moments
     print(f'\nFor the attribute {col}:')
     print(f'Mean = {mean:.2f}, 'f'Standard Deviation = {stddev:.2f}, 'f'Skewness = {skew:.2f}, and 'f'Excess Kurtosis = {excess_kurtosis:.2f}.')
+    
     # Delete the following options as appropriate for your data.
     # Not skewed and mesokurtic can be defined with asymmetries <-2 or >2.
     
     skewness_type = "not skewed" if abs(skew) < 0.5 else "right-skewed" if skew > 0 else "left-skewed"
     kurtosis_type = "mesokurtic" if -0.5 <= excess_kurtosis <= 0.5 else "leptokurtic" if excess_kurtosis > 0.5 else "platykurtic"
     
-    
     print(f'The data was {skewness_type} and {kurtosis_type}.')
+    
     return
 
 
 def main():
+    """
+    The main function reads a CSV file, preprocesses the data, generates and plots various types of
+    plots, performs statistical analysis on a specific column, and writes the results to a file.
+    :return: The `main()` function is returning nothing explicitly. It is a void function that performs
+    a series of data processing and visualization tasks but does not return any specific value.
+    """
     
     df = pd.read_csv('data.csv')
     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
