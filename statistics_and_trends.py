@@ -3,7 +3,7 @@ This is the template file for the statistics and trends assignment.
 You will be expected to complete all the sections and
 make this a fully working, documented file.
 You should NOT change any function, file or variable names,
-if they are given to you here.
+ if they are given to you here.
 Make use of the functions presented in the lectures
 and ensure your code is PEP-8 compliant, including docstrings.
 """
@@ -28,8 +28,9 @@ def plot_relational_plot(df):
     return
 
 
+
 def plot_categorical_plot(df):
-    
+    avg_mon = df.groupby('Month')['Volume'].mean()
     fig, ax = plt.subplots(figsize=(7,7))
     plt.grid(color = 'gray' , zorder = -3 , linestyle = '--')
     sns.barplot(x = avg_mon.index , y=avg_mon.values, color='b')
@@ -76,7 +77,7 @@ def writing(moments, col):
     
     mean, stddev, skew, excess_kurtosis = moments
     print(f'\nFor the attribute {col}:')
-    print(f'Mean = {mean:.2f}, 'f'Standard Deviation = {stddev:.2f}, 'f'Skewness = {skew:.2f}, and 'f'Excess Kurtosis = {excess_kurtosis:.2f}.')
+    print(f'Mean = {mean:.2f}, 'f' Standard Deviation = {stddev:.2f}, 'f' Skewness = {skew:.2f}, and 'f'Excess Kurtosis = {excess_kurtosis:.2f}.')
     # Delete the following options as appropriate for your data.
     # Not skewed and mesokurtic can be defined with asymmetries <-2 or >2.
     
@@ -91,6 +92,8 @@ def writing(moments, col):
 def main():
     
     df = pd.read_csv('data.csv')
+    
+    df["Month"] = df["Date"].dt.month
     df_num = df.select_dtypes(include=["number"])
     df = preprocessing(df_num)
     col = 'Open'
