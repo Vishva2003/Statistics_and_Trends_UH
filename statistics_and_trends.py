@@ -77,7 +77,7 @@ def writing(moments, col):
     
     mean, stddev, skew, excess_kurtosis = moments
     print(f'\nFor the attribute {col}:')
-    print(f'Mean = {mean:.2f}, 'f' Standard Deviation = {stddev:.2f}, 'f' Skewness = {skew:.2f}, and 'f'Excess Kurtosis = {excess_kurtosis:.2f}.')
+    print(f'Mean = {mean:.2f}, 'f'Standard Deviation = {stddev:.2f}, 'f'Skewness = {skew:.2f}, and 'f'Excess Kurtosis = {excess_kurtosis:.2f}.')
     # Delete the following options as appropriate for your data.
     # Not skewed and mesokurtic can be defined with asymmetries <-2 or >2.
     
@@ -92,15 +92,16 @@ def writing(moments, col):
 def main():
     
     df = pd.read_csv('data.csv')
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    df['Month'] = df['Date'].dt.month
+    df_num = df.select_dtypes(include=['number'])
     
-    df["Month"] = df["Date"].dt.month
-    df_num = df.select_dtypes(include=["number"])
     df = preprocessing(df_num)
     col = 'Open'
-    plot_relational_plot(df_num)
-    plot_statistical_plot(df_num)
-    plot_categorical_plot(df_num)
-    moments = statistical_analysis(df_num, col)
+    plot_relational_plot(df)
+    plot_statistical_plot(df)
+    plot_categorical_plot(df)
+    moments = statistical_analysis(df, col)
     writing(moments, col)
     return
 
